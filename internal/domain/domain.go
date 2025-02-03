@@ -8,5 +8,5 @@ type WalletRepository interface {
 
 type BlocksRepository interface {
 	AddLastBlock(ctx context.Context, blockNumber int, network, operation string) error
-	LastBlock(ctx context.Context, network string) (int, error)
+	LastBlock(ctx context.Context, network, operation string) (int, error)
 }

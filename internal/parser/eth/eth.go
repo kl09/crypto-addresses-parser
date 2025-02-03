@@ -96,7 +96,7 @@ func (w *Parser) ParseNew(ctx context.Context) error {
 
 	logger := slog.With("network", w.network, "operation", newBlockName)
 	logger.Info("start parsing new blocks")
-	blockNumber, err := w.getBlockNumber(ctx, w.network+newBlockName)
+	blockNumber, err := w.getBlockNumber(ctx, w.network, newBlockName)
 	if err != nil {
 		return fmt.Errorf("get block number: %w", err)
 	}
@@ -140,7 +140,7 @@ func (w *Parser) ParsePast(ctx context.Context) error {
 
 	logger := slog.With("network", w.network, "operation", pastBlockName)
 	logger.Info("start parsing old blocks")
-	blockNumber, err := w.getBlockNumber(ctx, w.network+pastBlockName)
+	blockNumber, err := w.getBlockNumber(ctx, w.network, pastBlockName)
 	if err != nil {
 		return fmt.Errorf("get block number: %w", err)
 	}
@@ -247,8 +247,8 @@ func (w *Parser) addressesFromBlock(block int) (map[string]struct{}, error) {
 	return addresses, nil
 }
 
-func (w *Parser) getBlockNumber(ctx context.Context, network string) (int, error) {
-	blockNumber, err := w.blocksRepository.LastBlock(ctx, network)
+func (w *Parser) getBlockNumber(ctx context.Context, network, operation string) (int, error) {
+	blockNumber, err := w.blocksRepository.LastBlock(ctx, network, operation)
 	if err != nil {
 		c := w.randomClient()
 		blockNumber, err = c.EthBlockNumber()

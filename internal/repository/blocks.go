@@ -33,10 +33,10 @@ func (r *BlocksRepository) AddLastBlock(ctx context.Context, blockNumber int, ne
 	return nil
 }
 
-func (r *BlocksRepository) LastBlock(ctx context.Context, network string) (int, error) {
+func (r *BlocksRepository) LastBlock(ctx context.Context, network, operation string) (int, error) {
 	var blockNumber int
 	query := `SELECT block_number FROM last_block WHERE network = $1`
-	err := r.db.QueryRow(ctx, query, network).Scan(&blockNumber)
+	err := r.db.QueryRow(ctx, query, network+"_"+operation).Scan(&blockNumber)
 	if err != nil {
 		return 0, fmt.Errorf("last block: %w", err)
 	}
